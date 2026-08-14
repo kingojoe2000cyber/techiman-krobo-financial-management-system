@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Techiman Krobo Nursing and Midwifery Training College Financial Management System MVP" />
+  <meta name="theme-color" content="#0b2447" />
+  <title>Techiman Krobo NMTC Financial Management System</title>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <div class="brand">
+        <div class="brand-mark">TK</div>
+        <div>
+          <strong>Finance360</strong>
+          <small>Techiman Krobo NMTC</small>
+        </div>
+      </div>
+
+      <nav class="nav" aria-label="Primary navigation">
+        <button class="nav-link active" data-view="dashboard"><span>▦</span> Dashboard</button>
+        <button class="nav-link" data-view="cashbook"><span>₵</span> Cashbook</button>
+        <button class="nav-link" data-view="payments"><span>✓</span> Payment Reconciliation</button>
+        <button class="nav-link" data-view="bank"><span>🏦</span> Bank Reconciliation</button>
+        <button class="nav-link" data-view="payroll"><span>👥</span> Payroll</button>
+        <button class="nav-link" data-view="statutory"><span>⚖</span> Tax & SSNIT</button>
+        <button class="nav-link" data-view="budget"><span>▤</span> Budget & Commitments</button>
+        <button class="nav-link" data-view="reports"><span>▥</span> Reports</button>
+        <button class="nav-link" data-view="settings"><span>⚙</span> Settings</button>
+      </nav>
+
+      <div class="sidebar-foot"><span class="status-dot"></span>MVP • Local browser database</div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <button class="menu-btn" id="menuBtn" aria-label="Toggle menu">☰</button>
+        <div><h1 id="pageTitle">Executive Financial Dashboard</h1><p id="pageSubtitle">Public-sector financial control overview</p></div>
+        <div class="top-actions"><button class="ghost-btn" id="backupBtn">Backup Data</button><button class="primary-btn" data-open-view="cashbook">+ New Transaction</button></div>
+      </header>
+
+      <div class="notice"><strong>MVP / demonstration environment:</strong> this GitHub Pages version stores data in your browser only. Do not use real payroll, tax, banking or personally identifiable information until the secure database/authentication version is deployed.</div>
+
+      <section class="view active" id="dashboard">
+        <div class="kpi-grid" id="kpiGrid"></div>
+        <div class="grid two">
+          <article class="card"><div class="card-head"><div><h2>Cash Position</h2><p>Receipts, payments and current book balance</p></div></div><div class="cash-summary" id="cashSummary"></div></article>
+          <article class="card"><div class="card-head"><div><h2>Compliance Calendar</h2><p>Tax and social security remittance status</p></div></div><div id="complianceList" class="stack-list"></div></article>
+        </div>
+        <div class="grid two">
+          <article class="card"><div class="card-head"><div><h2>Reconciliation Control</h2><p>Outstanding bank and payment reconciliation items</p></div></div><div id="reconOverview"></div></article>
+          <article class="card"><div class="card-head"><div><h2>Budget Utilisation</h2><p>Approved budget compared with actual expenditure</p></div></div><div id="budgetOverview"></div></article>
+        </div>
+        <article class="card"><div class="card-head"><div><h2>Recent Financial Activity</h2><p>Latest posted cashbook transactions</p></div><button class="link-btn" data-open-view="cashbook">View cashbook</button></div><div class="table-wrap"><table id="recentTransactionsTable"></table></div></article>
+      </section>
+
+      <section class="view" id="cashbook">
+        <div class="grid form-layout">
+          <article class="card form-card"><div class="card-head"><div><h2>Post Cashbook Transaction</h2><p>Record receipts and payments</p></div></div>
+            <form id="cashbookForm" class="form-grid">
+              <label>Date<input type="date" name="date" required /></label><label>Type<select name="type" required><option value="Receipt">Receipt</option><option value="Payment">Payment</option></select></label>
+              <label>Reference<input type="text" name="reference" placeholder="PV/RCPT/2026/001" required /></label><label>Category<select name="category" required><option>Student Fees</option><option>Government Grant</option><option>Internally Generated Funds</option><option>Compensation</option><option>Goods & Services</option><option>Capital Expenditure</option><option>Utilities</option><option>Training</option><option>Travel & Transport</option><option>Other</option></select></label>
+              <label class="span-2">Description<input type="text" name="description" required placeholder="Transaction description" /></label><label>Amount (GHS)<input type="number" min="0" step="0.01" name="amount" required /></label><label>Bank Account<select name="bankAccount" id="cashbookBankSelect" required></select></label>
+              <label class="span-2">Payee / Payer<input type="text" name="party" placeholder="Supplier, staff, student or payer" /></label><div class="form-actions span-2"><button class="primary-btn" type="submit">Post Transaction</button></div>
+            </form>
+          </article>
+          <article class="card"><div class="card-head"><div><h2>Cashbook Register</h2><p>Receipts and payments ledger</p></div><button class="ghost-btn export-btn" data-export="cashbook">Export CSV</button></div><div class="filter-row"><input id="cashbookSearch" type="search" placeholder="Search reference, description or party" /><select id="cashbookTypeFilter"><option value="">All types</option><option>Receipt</option><option>Payment</option></select></div><div class="table-wrap tall"><table id="cashbookTable"></table></div></article>
+        </div>
+      </section>
+
+      <section class="view" id="payments"><div class="grid form-layout">
+        <article class="card form-card"><div class="card-head"><div><h2>Payment Voucher Register</h2><p>Create and reconcile approved payments</p></div></div>
+          <form id="paymentForm" class="form-grid"><label>Voucher Date<input type="date" name="date" required /></label><label>Voucher No.<input type="text" name="voucher" required placeholder="PV/2026/001" /></label><label class="span-2">Payee<input type="text" name="payee" required /></label><label>Invoice / Claim Ref<input type="text" name="invoice" /></label><label>Amount (GHS)<input type="number" min="0" step="0.01" name="amount" required /></label><label>Payment Method<select name="method"><option>Bank Transfer</option><option>Cheque</option><option>Electronic Payment</option><option>Other</option></select></label><label>Approval Status<select name="approval"><option>Prepared</option><option>Reviewed</option><option>Approved</option><option>Paid</option></select></label><label class="span-2">Purpose<input type="text" name="purpose" required /></label><div class="form-actions span-2"><button class="primary-btn" type="submit">Add Voucher</button></div></form>
+        </article>
+        <article class="card"><div class="card-head"><div><h2>Payment Reconciliation</h2><p>Match vouchers to evidence and bank settlement</p></div><button class="ghost-btn export-btn" data-export="payments">Export CSV</button></div><div class="table-wrap tall"><table id="paymentsTable"></table></div></article>
+      </div></section>
+
+      <section class="view" id="bank"><div class="grid two">
+        <article class="card form-card"><div class="card-head"><div><h2>Bank Reconciliation Statement</h2><p>Compare cashbook with bank statement</p></div></div><form id="bankReconForm" class="form-grid"><label>Reconciliation Date<input type="date" name="date" required /></label><label>Bank Account<select name="bankAccount" id="reconBankSelect"></select></label><label>Statement Closing Balance<input type="number" step="0.01" name="statementBalance" required /></label><label>Bank Charges / Credits Adjustment<input type="number" step="0.01" name="adjustment" value="0" /></label><div class="form-actions span-2"><button class="primary-btn" type="submit">Save Reconciliation Header</button></div></form><div id="bankReconSummary" class="recon-box"></div></article>
+        <article class="card"><div class="card-head"><div><h2>Uncleared Cashbook Items</h2><p>Tick items appearing on the bank statement</p></div></div><div class="table-wrap tall"><table id="bankReconTable"></table></div></article>
+      </div></section>
+
+      <section class="view" id="payroll"><div class="grid form-layout">
+        <article class="card form-card"><div class="card-head"><div><h2>Employee Payroll Record</h2><p>Manage gross pay, deductions and net pay</p></div></div><form id="payrollForm" class="form-grid"><label>Staff ID<input type="text" name="staffId" required /></label><label>Employee Name<input type="text" name="name" required /></label><label>Department<input type="text" name="department" placeholder="Accounts, Academic, Administration" /></label><label>Payroll Month<input type="month" name="month" required /></label><label>Basic Salary<input type="number" min="0" step="0.01" name="basic" required /></label><label>Allowances<input type="number" min="0" step="0.01" name="allowances" value="0" /></label><label>PAYE<input type="number" min="0" step="0.01" name="paye" value="0" /></label><label>Other Deductions<input type="number" min="0" step="0.01" name="otherDeductions" value="0" /></label><div class="form-actions span-2"><button class="primary-btn" type="submit">Add Payroll Record</button></div></form><p class="form-note">SSNIT deductions are calculated using configurable employee/employer rates in Settings. PAYE is entered as the approved payroll amount because PAYE uses statutory tax bands.</p></article>
+        <article class="card"><div class="card-head"><div><h2>Payroll Register</h2><p>Gross salary, statutory deductions and net pay</p></div><button class="ghost-btn export-btn" data-export="payroll">Export CSV</button></div><div class="summary-strip" id="payrollSummary"></div><div class="table-wrap tall"><table id="payrollTable"></table></div></article>
+      </div></section>
+
+      <section class="view" id="statutory"><div class="grid form-layout">
+        <article class="card form-card"><div class="card-head"><div><h2>Statutory Remittance</h2><p>Track PAYE, withholding tax and social security payments</p></div></div><form id="statutoryForm" class="form-grid"><label>Period<input type="month" name="period" required /></label><label>Remittance Type<select name="type"><option>PAYE</option><option>Withholding Tax</option><option>SSNIT Employee</option><option>SSNIT Employer</option><option>Other Statutory Deduction</option></select></label><label>Amount Due<input type="number" min="0" step="0.01" name="amountDue" required /></label><label>Due Date<input type="date" name="dueDate" required /></label><label>Amount Paid<input type="number" min="0" step="0.01" name="amountPaid" value="0" /></label><label>Payment Date<input type="date" name="paymentDate" /></label><label>Receipt / Reference<input type="text" name="reference" /></label><label>Status<select name="status"><option>Pending</option><option>Part Paid</option><option>Paid</option></select></label><div class="form-actions span-2"><button class="primary-btn" type="submit">Record Remittance</button></div></form></article>
+        <article class="card"><div class="card-head"><div><h2>Tax & Social Security Register</h2><p>Evidence of statutory payment and outstanding liabilities</p></div><button class="ghost-btn export-btn" data-export="statutory">Export CSV</button></div><div class="table-wrap tall"><table id="statutoryTable"></table></div></article>
+      </div></section>
+
+      <section class="view" id="budget"><div class="grid form-layout">
+        <article class="card form-card"><div class="card-head"><div><h2>Budget Line</h2><p>Approved budget, commitments and actual expenditure</p></div></div><form id="budgetForm" class="form-grid"><label>Financial Year<input type="number" name="year" min="2020" max="2100" required /></label><label>Budget Code<input type="text" name="code" required /></label><label class="span-2">Budget Line<input type="text" name="line" required /></label><label>Approved Budget<input type="number" min="0" step="0.01" name="approved" required /></label><label>Commitments<input type="number" min="0" step="0.01" name="committed" value="0" /></label><label>Actual Expenditure<input type="number" min="0" step="0.01" name="actual" value="0" /></label><label>Funding Source<select name="funding"><option>Government of Ghana</option><option>Internally Generated Funds</option><option>Donor / Project</option><option>Other</option></select></label><div class="form-actions span-2"><button class="primary-btn" type="submit">Add Budget Line</button></div></form></article>
+        <article class="card"><div class="card-head"><div><h2>Budget & Commitment Register</h2><p>Monitor available balances and over-commitment risk</p></div><button class="ghost-btn export-btn" data-export="budget">Export CSV</button></div><div class="table-wrap tall"><table id="budgetTable"></table></div></article>
+      </div></section>
+
+      <section class="view" id="reports"><div class="grid three report-grid"><article class="report-card"><h3>Cashbook Summary</h3><p>Receipts, payments and closing book balance.</p><button class="ghost-btn export-btn" data-export="cashbook">Download CSV</button></article><article class="report-card"><h3>Payment Reconciliation</h3><p>Voucher approval, evidence and bank settlement status.</p><button class="ghost-btn export-btn" data-export="payments">Download CSV</button></article><article class="report-card"><h3>Payroll Register</h3><p>Gross pay, deductions, SSNIT and net payroll.</p><button class="ghost-btn export-btn" data-export="payroll">Download CSV</button></article><article class="report-card"><h3>Tax & SSNIT Remittance</h3><p>Outstanding and paid statutory obligations.</p><button class="ghost-btn export-btn" data-export="statutory">Download CSV</button></article><article class="report-card"><h3>Budget Performance</h3><p>Budget, commitment, actual and available balance.</p><button class="ghost-btn export-btn" data-export="budget">Download CSV</button></article><article class="report-card"><h3>Full System Backup</h3><p>Download all MVP records as a JSON backup.</p><button class="primary-btn" id="reportBackupBtn">Download Backup</button></article></div><article class="card"><div class="card-head"><div><h2>Management Financial Snapshot</h2><p>Printable summary for Principal / Management Committee review</p></div><button class="ghost-btn" id="printReportBtn">Print</button></div><div id="managementReport" class="management-report"></div></article></section>
+
+      <section class="view" id="settings"><div class="grid two"><article class="card form-card"><div class="card-head"><div><h2>Institution & Payroll Settings</h2><p>Configure local MVP parameters</p></div></div><form id="settingsForm" class="form-grid"><label class="span-2">Institution Name<input type="text" name="institutionName" /></label><label>Financial Year<input type="number" name="financialYear" min="2020" max="2100" /></label><label>Currency<input type="text" name="currency" value="GHS" /></label><label>Employee SSNIT Rate (%)<input type="number" name="ssnitEmployeeRate" min="0" max="100" step="0.01" /></label><label>Employer SSNIT Rate (%)<input type="number" name="ssnitEmployerRate" min="0" max="100" step="0.01" /></label><div class="form-actions span-2"><button class="primary-btn" type="submit">Save Settings</button></div></form><p class="form-note">Enter current approved statutory rates applicable to the institution. Rates are configurable rather than hard-coded.</p></article><article class="card"><div class="card-head"><div><h2>Bank Accounts</h2><p>Accounts used for cashbook and reconciliation</p></div></div><form id="bankAccountForm" class="inline-form"><input name="name" placeholder="Account name" required /><input name="number" placeholder="Account number / masked ref" required /><button class="primary-btn" type="submit">Add</button></form><div id="bankAccountsList" class="stack-list"></div></article></div><article class="card danger-zone"><div class="card-head"><div><h2>Data Administration</h2><p>Backup, restore or reset the local MVP database</p></div></div><div class="button-row"><button class="ghost-btn" id="restoreBtn">Restore JSON Backup</button><input type="file" id="restoreInput" accept="application/json" hidden /><button class="danger-btn" id="resetBtn">Reset Demo Data</button></div></article></section>
+    </main>
+  </div>
+  <div class="toast" id="toast" role="status"></div>
+  <script src="app.js"></script>
+</body>
+</html>
